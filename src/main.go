@@ -3,7 +3,6 @@ package main
 import (
   "fmt"
   "net/http"
-  "database/sql"
   "github.com/gorilla/websocket"
 )
 var upgrader = websocket.Upgrader{
@@ -27,9 +26,12 @@ func handler (w http.ResponseWriter, r *http.Request) error {
     return nil
 }
 func main() {
-    db, err := sql.Open("mysql", "root:nhinCAIgi90$@/practice_go")
-    list, err := db.Query("SELECT * FROM users")
-    fmt.Println(list, err)
+    //db, err := sql.Open("mysql", "root:nhinCAIgi90$@/practice_go")
+    // list, err := db.Query("SELECT * FROM users")
+    // fmt.Println(list, err)
     http.Handle("/", http.FileServer(http.Dir("./")))
+    http.HandleFunc("/ws", func (w http.ResponseWriter, r *http.Request) {
+        handler(w, r)
+    })
     http.ListenAndServe(":3000", nil)
 }
